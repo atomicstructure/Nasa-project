@@ -9,7 +9,8 @@ const server = http.createServer(app)
 async function serverStarts(){
   await loadPlanetsData();
 
-  app.listen(PORT, () => {
+  server.listen(PORT, () => {
+    /*Note that you can also use app.listen here which wont use the http method*/
     console.log(`Server listening on port ${PORT}`)
   })
 }
