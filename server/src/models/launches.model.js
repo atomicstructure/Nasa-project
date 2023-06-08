@@ -18,8 +18,6 @@ const launch = {
 
 saveLaunch(launch);
 
-
-
 function existsLaunchWithId(launchId){
   return launches.has(launchId)
 }
