@@ -11,11 +11,13 @@ const server = http.createServer(app)
 mongoose.connection.once('open', () => {
   console.log('MongoDB connection ready...')
 });
-mongoose.connection.on('error', (err) => {
+mongoose.connection.on('error', err => {
   console.error(err);
 })
 async function serverStarts(){
-  await mongoose.connect(MONGO_URL);
+  await mongoose.connect(MONGO_URL, {
+    useUnifiedTopology: true,
+  });
   await loadPlanetsData();
 
   server.listen(PORT, () => {
