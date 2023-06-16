@@ -11,6 +11,21 @@ const habitablePlanet = function(planet){
   && planet['koi_prad'] < 1.6
 }
 
+async function savePlanet(planet){
+  try {
+   await planets.updateOne({
+     keplerName: planet.kepler_name,
+   }, {
+     keplerName: planet.kepler_name,
+   }, {
+     upsert: true,
+   });
+  } catch (error) {
+   console.error(`Could not save a Planet ${error}`)
+  }
+ }
+
+
 function loadPlanetsData() {
   return new Promise((resolve, reject) => {
     fs.createReadStream(path.join(__dirname, '..', '..', 'data','kepler_data.csv'))
@@ -42,19 +57,6 @@ async function getAllPlanets(){
   });
 }
 
-async function savePlanet(planet){
- try {
-  await planets.updateOne({
-    keplerName: planet.kepler_name,
-  }, {
-    keplerName: planet.kepler_name,
-  }, {
-    upsert: true,
-  });
- } catch (error) {
-  console.error(`Could not save a Planet ${error}`)
- }
-}
 
   module.exports = {
     loadPlanetsData,
