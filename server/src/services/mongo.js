@@ -6,7 +6,8 @@ const MONGO_URL = 'mongodb+srv://ogundarearnold:jSRAyKqnLya8YRd2@nasa-project.h8
 mongoose.connection.once('open', () => {
     console.log('MongoDB connection ready...')
   });
-  mongoose.connection.on('error', err => {
+  
+mongoose.connection.on('error', err => {
     console.error(err);
   })
 
