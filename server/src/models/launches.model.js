@@ -1,24 +1,64 @@
 const launchesDatabase = require('./launches.mongo');
 const planets = require('./planets.mongo');
+const axios = require('axios')
 
 const DEFAULT_FLIGHT_NUMBER = 100;
 
 
 const launch = {
-  flightNumber: 100,
-  mission: 'Samantha Explorer I',
-  rocket: 'Explorer IS35',
-  launchDate: new Date('December 25, 2024'),
-  target: 'Kepler-442 b',
-  customers: ['SMT', 'CHR'],
-  upcoming: true,
-  success: true,
+  flightNumber: 100, //Exists too flight_number
+  mission: 'Samantha Explorer I', //exists as name
+  rocket: 'Explorer IS35', //Exists in SPACEX API rocket.name
+  launchDate: new Date('December 25, 2024'), //date_local, exists too
+  target: 'Kepler-442 b', // Does not exists, not applicable
+  customers: ['SMT', 'CHR'], //exists under payload. payload.customers for each payload
+  upcoming: true, //exists as a boolean value
+  success: true, //exists also as a boolean value
 };
 
 saveLaunch(launch);
+const SPACEX_API_URL = 'https://api.spacexdata.com/v5/launches/query'
 
 async function loadLaunchData() {
   console.log('Downloading Launch Data from SpaceX')
+  const response = await axios.post(SPACEX_API_URL, {
+    query: {},
+    options: {
+        populate: [
+            {
+                path: "rocket",
+                select: {
+                    name: 1
+                }
+            },
+            {
+              path: 'payloads',
+              select: {
+                'customers': 1
+              }
+            },
+        ]
+    }
+});
+
+const launchDocs = response.data.docs;
+for (const launchDoc of launchDocs){
+  const payloads = launchDoc['payloads'];
+  const customers = payloads.flatMap((payload) => {
+    return payload['customers'];
+  })
+
+  const launch = {
+    flightNumber: launchDoc['flight_number'],
+    mission: launchDoc['name'],
+    rocket: launchDoc['rocket'] ['name'],
+    launchDate: launchDoc['date_local'],
+    upcoming: launchDoc['upcoming'],
+    success: launchDoc['success'],
+    customers
+};
+console.log(`${launch.flightNumber} ${launch.mission}`)
+};
 }
 
 async function existsLaunchWithId(launchId){
