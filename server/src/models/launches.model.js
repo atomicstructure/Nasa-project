@@ -4,19 +4,6 @@ const axios = require('axios')
 
 const DEFAULT_FLIGHT_NUMBER = 100;
 
-
-const launch = {
-  flightNumber: 100, //Exists too flight_number
-  mission: 'Samantha Explorer I', //exists as name
-  rocket: 'Explorer IS35', //Exists in SPACEX API rocket.name
-  launchDate: new Date('December 25, 2024'), //date_local, exists too
-  target: 'Kepler-442 b', // Does not exists, not applicable
-  customers: ['SMT', 'CHR'], //exists under payload. payload.customers for each payload
-  upcoming: true, //exists as a boolean value
-  success: true, //exists also as a boolean value
-};
-
-saveLaunch(launch);
 const SPACEX_API_URL = 'https://api.spacexdata.com/v5/launches/query'
 
 async function populateLaunches() {
@@ -105,11 +92,16 @@ async function getLatestFlightNumber(){
   return latestLaunch.flightNumber;
 }
 
-async function getAllLaunches(){
+async function getAllLaunches(skip, limit){
   return await launchesDatabase.find({}, {
     '_id': 0,
     '__v': 0,
-  });
+  })
+  .sort({
+    flightNumber: 1
+  })
+  .skip(skip)
+  .limit(limit);
 }
 
 async function saveLaunch(launch) {
