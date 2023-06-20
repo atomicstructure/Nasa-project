@@ -17,6 +17,10 @@ const launch = {
 
 saveLaunch(launch);
 
+async function loadLaunchData() {
+  console.log('Downloading Launch Data from SpaceX')
+}
+
 async function existsLaunchWithId(launchId){
   return await launchesDatabase.findOne({
     flightNumber: launchId,
@@ -88,4 +92,5 @@ module.exports = {
   getAllLaunches,
   abortLaunchById,
   scheduleNewLaunch,
+  loadLaunchData,
 }
