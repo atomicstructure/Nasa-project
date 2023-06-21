@@ -1,3 +1,6 @@
+
+![Nasa_Mission_Control](https://github.com/atomicstructure/Nasa-project/assets/86707117/a889deaa-64b7-43f6-8383-9ecd2d69c58a)
+
 # Nasa Mission Control
 
 This is a project by @atomicstructure on the Nasa Mission Control Dashboard. In this Project, you will be able to access a dashboard which displays rockets launched in the past,present and future
